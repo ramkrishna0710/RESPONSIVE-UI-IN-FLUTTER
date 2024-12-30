@@ -1,16 +1,175 @@
-# responsive_project
+# Responsive Layout in Flutter
 
-A new Flutter project.
+This code demonstrates a simple setup for creating a responsive layout in Flutter. It provides two main UI structures: one for mobile screens and another for desktop screens. The `MobileBody` and `DesktopBody` classes define how the UI is presented based on the device's screen size.
 
-## Getting Started
+## Mobile Layout
 
-This project is a starting point for a Flutter application.
+```dart
+import 'package:flutter/material.dart';
 
-A few resources to get you started if this is your first Flutter project:
+class MobileBody extends StatelessWidget {
+  const MobileBody({super.key});
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.purple[200],
+      appBar: AppBar(
+          title: const Text(
+            'M O B I L E',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.white),
+          ),
+        backgroundColor: Colors.indigo,
+      ),
+      body: Column(
+        children: [
+          // Aspect Ratio Container
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: AspectRatio(
+              aspectRatio: 16 / 9,
+              child: Container(
+                height: 250,
+                color: Colors.deepPurple[400],
+              ),
+            ),
+          ),
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+          // ListView for additional content
+          Expanded(
+            child: ListView.builder(
+              itemCount: 8,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    color: Colors.deepPurple[300],
+                    height: 120,
+                  ),
+                );
+              },
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+```
+
+### Key Features of Mobile Layout
+- Purple-themed UI with a dedicated AppBar.
+- Top section with an `AspectRatio` container.
+- A scrollable list of items built using `ListView.builder`.
+
+## Desktop Layout
+
+```dart
+import 'package:flutter/material.dart';
+
+class DesktopBody extends StatelessWidget {
+  const DesktopBody({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.pink[200],
+      appBar: AppBar(
+        title: const Text(
+          'D E S K T O P',
+          textAlign: TextAlign.center,
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.indigo,
+      ),
+      body: Row(
+        children: [
+          // First Column
+          Expanded(
+            child: Column(
+              children: [
+                // Aspect Ratio Container
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: AspectRatio(
+                    aspectRatio: 16 / 9,
+                    child: Container(
+                      height: 250,
+                      color: Colors.deepPurple[400],
+                    ),
+                  ),
+                ),
+
+                // ListView for additional content
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: 8,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          color: Colors.deepPurple[300],
+                          height: 120,
+                        ),
+                      );
+                    },
+                  ),
+                )
+              ],
+            ),
+          ),
+
+          // Second Column
+          Container(
+            width: 200,
+            color: Colors.deepPurple[300],
+          )
+        ],
+      ),
+    );
+  }
+}
+```
+
+### Key Features of Desktop Layout
+- Pink-themed UI with a desktop-specific AppBar.
+- Split-screen design with two main sections:
+  - **First Column**: Contains an `AspectRatio` container and a scrollable list of items.
+  - **Second Column**: A fixed-width container for additional content or navigation.
+
+## How to Use
+1. Import the `MobileBody` and `DesktopBody` classes into your main file.
+2. Use `LayoutBuilder` or a responsive package (like `flutter_responsive`) to dynamically switch between `MobileBody` and `DesktopBody` based on the screen width.
+
+### Example Main File
+```dart
+import 'package:flutter/material.dart';
+import 'mobile_body.dart';
+import 'desktop_body.dart';
+
+void main() => runApp(const MyApp());
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: LayoutBuilder(
+        builder: (context, constraints) {
+          if (constraints.maxWidth < 600) {
+            return const MobileBody();
+          } else {
+            return const DesktopBody();
+          }
+        },
+      ),
+    );
+  }
+}
+```
+
+### Conclusion
+This setup serves as a foundation for building responsive Flutter applications, ensuring an optimal user experience across different devices.
